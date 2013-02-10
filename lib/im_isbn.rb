@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-module ImIsbn
+#module ImIsbn
 
   class InvalidISBNLength < StandardError
   end
@@ -287,4 +287,4 @@ module ImIsbn
     end
 
   end
-end
+#end

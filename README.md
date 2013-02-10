@@ -3,11 +3,6 @@
 Helper class to convert and check ISBN validity
 
 ### Usage
-ISBN class is encapsulated in ImIsbn module to avoid conflict.
-You can include to use ISBN as top level ISBN.
-```ruby
-include ImIsbn
-```
 Object initializer accept any EAN 10, EAN 13, ISBN 10 or ISBN 13 string with or without control key
 ```ruby
 isbn=ISBN.new("9782814507159")
