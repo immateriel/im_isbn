@@ -8,13 +8,14 @@ You can include to use ISBN as top level ISBN.
 ```ruby
 include ImIsbn
 ```
-Object creation accept any EAN 10, EAN 13, ISBN 10 or ISBN 13 string with or without control key
+Object initializer accept any EAN 10, EAN 13, ISBN 10 or ISBN 13 string with or without control key
 ```ruby
 isbn=ISBN.new("9782814507159")
-isbn2=ISBN.new("978-2-8145-0715-9")
-isbn3=ISBN.new("978281450715")
+isbn=ISBN.new("978-2-8145-0715-9")
+isbn=ISBN.new("978281450715")
+isbn=ISBN.new("281450715X")
 ```
-Creation raise error when ISBN is invalid :
+Creating object raise error when ISBN is invalid :
 ```ruby
 isbn=ISBN.new("9782814507151")
 raise ImIsbn::InvalidISBNControlKey: given ISBN control key is 1, must be 9
