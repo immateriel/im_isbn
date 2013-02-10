@@ -4,16 +4,15 @@ Helper class to convert and check ISBN validity
 
 ### Usage
 ISBN class is encapsulated in ImIsbn module to avoid conflict.
-You can
+You can include to use ISBN as top level ISBN.
 ```ruby
 include ImIsbn
 ```
-to use ISBN as top level ISBN.
-
-Object creation accept any EAN 10, EAN 13, ISBN 10 or ISBN 13 string
+Object creation accept any EAN 10, EAN 13, ISBN 10 or ISBN 13 string with or without control key
 ```ruby
 isbn=ISBN.new("9782814507159")
-isbn2=ISBN.new("978-3-492-96143-1")
+isbn2=ISBN.new("978-2-8145-0715-9")
+isbn3=ISBN.new("978281450715")
 ```
 Creation raise error when ISBN is invalid :
 ```ruby
@@ -30,15 +29,32 @@ isbn=ISBN.corrected("9782814507151")
 isbn.to_ean13_s
 => "9782814507159"
 ```
-You can convert to ISBN 13 as string :
+You can also quick check ISBN validity :
+```ruby
+ISBN.valid?("9782814507159")
+=> true
+ISBN.valid?("9782814507151")
+=> false
+```
+You can convert to ISBN 13 string :
 ```ruby
 isbn.to_isbn13_s
-=> "978-3-492-96143-1"
+=> "978-2-8145-0715-9"
 ```
-Or array :
+ISBN 13 array :
 ```ruby
 isbn.to_isbn13_a
-=> ["978", "3", "492", "96143", "1"]
+=> ["978", "2", "8145", "0715", "9"]
+```
+EAN 10 :
+```ruby
+isbn.to_ean10_s
+=> "281450715X"
+```
+ISBN 10 string :
+```ruby
+isbn.to_isbn10_s
+=> "2-8145-0715-X"
 ```
 
 ### License
