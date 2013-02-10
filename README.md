@@ -15,7 +15,7 @@ Creating object raise error when ISBN is invalid :
 isbn=ISBN.new("9782814507151")
 raise InvalidISBNControlKey: given ISBN control key is 1, must be 9
 isbn=ISBN.new("9782814507AAA")
-raise InvalidISBNFormat: ImIsbn::InvalidISBNFormat
+raise InvalidISBNFormat: InvalidISBNFormat
 isbn=ISBN.new("97828145071534")
 raise InvalidISBNLength: given ISBN length is 14, must be 10 or 13
 ```
