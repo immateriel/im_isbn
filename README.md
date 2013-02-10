@@ -13,11 +13,11 @@ isbn=ISBN.new("281450715X")
 Creating object raise error when ISBN is invalid :
 ```ruby
 isbn=ISBN.new("9782814507151")
-raise ImIsbn::InvalidISBNControlKey: given ISBN control key is 1, must be 9
+raise InvalidISBNControlKey: given ISBN control key is 1, must be 9
 isbn=ISBN.new("9782814507AAA")
-raise ImIsbn::InvalidISBNFormat: ImIsbn::InvalidISBNFormat
+raise InvalidISBNFormat: ImIsbn::InvalidISBNFormat
 isbn=ISBN.new("97828145071534")
-raise ImIsbn::InvalidISBNLength: given ISBN length is 14, must be 10 or 13
+raise InvalidISBNLength: given ISBN length is 14, must be 10 or 13
 ```
 But you can try to correct the ISBN with :
 ```ruby
