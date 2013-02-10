@@ -106,7 +106,7 @@ require 'nokogiri'
             raise InvalidISBNFormat
           end
 
-          calculated_control=self.class.ean10_control(@ean)
+          calculated_control=self.class.ean10_control("978"+@ean)
           @ean=@ean+calculated_control
         when 10
           @type=:ean10
@@ -115,7 +115,7 @@ require 'nokogiri'
           end
 
           given_control=@ean[9..9]
-          calculated_control=self.class.ean10_control(@ean)
+          calculated_control=self.class.ean10_control("978"+@ean)
           if given_control!=calculated_control
             raise InvalidISBNControlKey, "given ISBN control key is #{given_control}, must be #{calculated_control}"
           end
