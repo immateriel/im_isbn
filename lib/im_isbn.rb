@@ -214,9 +214,7 @@ class ISBN
     if ean.length < 11
       isbn=self.new(ean[0..8])
     else
-      if ean.length < 14
-        isbn=self.new(ean[0..11])
-      end
+      isbn=self.new(ean[0..11])
     end
     isbn
   end
