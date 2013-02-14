@@ -209,7 +209,7 @@ class ISBN
 
   # Instantiate from any string, correct if invalid
   def self.corrected(ean)
-    ean=ean.gsub(/-/, "")
+    ean=ean.gsub(/-/, "").strip
     isbn=nil
     if ean.length < 11
       isbn=self.new(ean[0..8])
