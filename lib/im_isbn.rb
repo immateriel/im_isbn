@@ -99,19 +99,24 @@ end
 
 class ISBN
   # Instantiate from any string, raise error if invalid
-  # accept ISBN 10, EAN 10, ISBN 13, EAN 13 with or without control key
-  def initialize(any)
+  # accept ISBN 10, EAN 10, ISBN 13, EAN 13 with key
+  # or without control key if exact is false
+  def initialize(any, exact=false)
     if any
       @ean=any.gsub(/\-/, "").strip
       case @ean.length
         when 9
-          @type=:ean10
-          unless self.class.ean10_check_format(@ean+"0")
-            raise InvalidISBNFormat
-          end
+          if exact
+            raise InvalidISBNLength, "given ISBN length is #{@ean.length}, must be 10 or 13"
+          else
+            @type=:ean10
+            unless self.class.ean10_check_format(@ean+"0")
+              raise InvalidISBNFormat
+            end
 
-          calculated_control=self.class.ean10_control("978"+@ean)
-          @ean=@ean+calculated_control
+            calculated_control=self.class.ean10_control("978"+@ean)
+            @ean=@ean+calculated_control
+          end
         when 10
           @type=:ean10
           unless self.class.ean10_check_format(@ean)
@@ -124,13 +129,17 @@ class ISBN
             raise InvalidISBNControlKey, "given ISBN control key is #{given_control}, must be #{calculated_control}"
           end
         when 12
-          @type=:ean13
-          unless self.class.ean13_check_format(@ean+"0")
-            raise InvalidISBNFormat
-          end
+          if exact
+            raise InvalidISBNLength, "given ISBN length is #{@ean.length}, must be 10 or 13"
+          else
+            @type=:ean13
+            unless self.class.ean13_check_format(@ean+"0")
+              raise InvalidISBNFormat
+            end
 
-          calculated_control=self.class.ean13_control(@ean)
-          @ean=@ean+calculated_control
+            calculated_control=self.class.ean13_control(@ean)
+            @ean=@ean+calculated_control
+          end
         when 13
           @type=:ean13
           unless self.class.ean13_check_format(@ean)
@@ -160,6 +169,11 @@ class ISBN
       when :ean10
         true
     end
+  end
+
+  # Default string
+  def to_s
+    self.to_ean13_s
   end
 
   # Convert object to EAN 13 string
