@@ -221,6 +221,16 @@ class ISBN
     end
   end
 
+  # Check if string can be corrected
+  def self.correctable?(ean)
+    begin
+      self.corrected(ean)
+      true
+    rescue
+      false
+    end
+  end
+
   # Instantiate from any string, correct if invalid
   def self.corrected(ean)
     ean=ean.gsub(/-/, "").strip
