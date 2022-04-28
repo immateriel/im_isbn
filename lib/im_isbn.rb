@@ -105,7 +105,7 @@ class ISBN
   # @param [Boolean] exact
   def initialize(any, exact = false)
     if any
-      @ean = any.to_s.gsub(/\-/, "").strip
+      @ean = any.to_s.delete '^0-9'
       case @ean.length
       when 9
         if exact
