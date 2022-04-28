@@ -148,7 +148,7 @@ class TestIsbn < Minitest::Test
       assert_equal %w[2 8145 0715 X], ISBN.new("9782814507159").to_isbn10_a
     end
 
-    should "cannot convert 979 to ISBN10 string" do
+    should "fail to convert 979 to ISBN10 string" do
       assert_raises CannotConvertToISBN10 do
         ISBN.new("9791030001006").to_isbn10_s
       end
