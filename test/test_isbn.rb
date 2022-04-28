@@ -30,6 +30,8 @@ class TestIsbn < Minitest::Test
     should "add EAN10 control" do
       assert_equal @expected_isbn, ISBN.new("281450715").to_s
       assert_equal "281450715X", ISBN.new("281450715").to_ean10_s
+      assert_equal "2765410054", ISBN.new("2-7654-1005").to_ean10_s
+      assert_equal "2811210830", ISBN.new("281121083").to_ean10_s
     end
 
     should "accept integer" do

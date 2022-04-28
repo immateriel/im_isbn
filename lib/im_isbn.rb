@@ -17,6 +17,7 @@ end
 
 class ISBNInternationalData
   # Convert EAN10 to ISBN10
+  # @return [Array<String>]
   def self.convert_ean10(ean)
     ean13 = "978#{ean}"
     isbn = self.find_rec(self.tree, ean13[0..11], [])
@@ -27,6 +28,7 @@ class ISBNInternationalData
   end
 
   # Convert EAN13 to ISBN13
+  # @return [Array<String>]
   def self.convert_ean13(ean)
     isbn = self.find_rec(self.tree, ean[0..11], [])
     last_suffix = ean[0..11].gsub(/#{isbn.join("")}/, "")
@@ -45,21 +47,22 @@ class ISBNInternationalData
     @@isbn_international_data ||= self.init_tree
   end
 
+  # @return [Array<String>]
   def self.find_rec(branch, ean, ean_arr)
     branch.each do |s|
       prefix = ean[0..s[:length] - 1]
       suffix = ean[s[:length]..ean.length - 1]
-      if prefix.to_i >= s[:start_range] and prefix.to_i <= s[:end_range]
+      if prefix.to_i >= s[:start_range] && prefix.to_i <= s[:end_range]
         ean_arr << prefix
         self.find_rec(s[:includes], suffix, ean_arr)
         return ean_arr
       end
     end
-    nil
+    []
   end
 
   def self.init_tree
-    tree = [{ :length => 3, :start_range => 978, :end_range => 979, :includes => [] }]
+    tree = [{ length: 3, start_range: 978, end_range: 979, includes: [] }]
 
     self.data_xml.search("//EAN.UCC").each do |group|
       prefix = group.at("./Prefix").text.split("-")
@@ -71,7 +74,7 @@ class ISBNInternationalData
         start_range = range[0][0..length - 1].to_i
         end_range = range[1][0..length - 1].to_i
 
-        tree[0][:includes] << { :length => length, :start_range => start_range, :end_range => end_range, :includes => [] }
+        tree[0][:includes] << { length: length, start_range: start_range, end_range: end_range, includes: [] }
       end
     end
 
@@ -84,9 +87,8 @@ class ISBNInternationalData
         end_range = range[1][0..length - 1].to_i
 
         tree[0][:includes].each do |s|
-          if s[:length] == prefix[1].length and prefix[1].to_i >= s[:start_range] and prefix[1].to_i <= s[:end_range]
-            s[:includes] << { :length => length, :start_range => start_range, :end_range => end_range, :includes => [] }
-
+          if s[:length] == prefix[1].length && prefix[1].to_i >= s[:start_range] && prefix[1].to_i <= s[:end_range]
+            s[:includes] << { length: length, start_range: start_range, end_range: end_range, includes: [] }
           end
         end
       end
@@ -110,48 +112,31 @@ class ISBN
           raise InvalidISBNLength, "given ISBN length is #{@ean.length}, must be 10 or 13"
         else
           @type = :ean10
-          unless self.class.ean10_check_format(@ean + "0")
-            raise InvalidISBNFormat
-          end
-
+          raise InvalidISBNFormat unless self.class.ean10_check_format(@ean + "0")
           calculated_control = self.class.ean10_control("978" + @ean)
           @ean = @ean + calculated_control
         end
       when 10
         @type = :ean10
-        unless self.class.ean10_check_format(@ean)
-          raise InvalidISBNFormat
-        end
-
+        raise InvalidISBNFormat unless self.class.ean10_check_format(@ean)
         given_control = @ean[9..9]
         calculated_control = self.class.ean10_control("978" + @ean)
-        if given_control != calculated_control
-          raise InvalidISBNControlKey, "given ISBN control key is #{given_control}, must be #{calculated_control}"
-        end
+        raise InvalidISBNControlKey, "given ISBN control key is #{given_control}, must be #{calculated_control}" if given_control != calculated_control
       when 12
         if exact
           raise InvalidISBNLength, "given ISBN length is #{@ean.length}, must be 10 or 13"
         else
           @type = :ean13
-          unless self.class.ean13_check_format(@ean + "0")
-            raise InvalidISBNFormat
-          end
-
+          raise InvalidISBNFormat unless self.class.ean13_check_format(@ean + "0")
           calculated_control = self.class.ean13_control(@ean)
           @ean = @ean + calculated_control
         end
       when 13
         @type = :ean13
-        unless self.class.ean13_check_format(@ean)
-          raise InvalidISBNFormat
-        end
-
+        raise InvalidISBNFormat unless self.class.ean13_check_format(@ean)
         given_control = @ean[12..12]
         calculated_control = self.class.ean13_control(@ean)
-        if given_control != calculated_control
-          raise InvalidISBNControlKey, "given ISBN control key is #{given_control}, must be #{calculated_control}"
-        end
-
+        raise InvalidISBNControlKey, "given ISBN control key is #{given_control}, must be #{calculated_control}" if given_control != calculated_control
       else
         raise InvalidISBNLength, "given ISBN length is #{@ean.length}, must be 10 or 13"
       end
@@ -242,14 +227,7 @@ class ISBN
   # Instantiate from any string, correct if invalid
   # @return [ISBN]
   def self.corrected(ean)
-    ean = ean.gsub(/-/, "").strip
-    isbn = nil
-    if ean.length < 11
-      isbn = self.new(ean[0..8])
-    else
-      isbn = self.new(ean[0..11])
-    end
-    isbn
+    ean.length < 11 ? self.new(ean[0..8]) : self.new(ean[0..11])
   end
 
   # Check if string can be instantiated
@@ -278,12 +256,10 @@ class ISBN
 
     if r < 10
       r.to_s
+    elsif r == 11
+      0.to_s
     else
-      if r == 11
-        0.to_s
-      else
-        "X"
-      end
+      "X"
     end
   end
 
