@@ -227,7 +227,7 @@ class ISBN
   # Instantiate from any string, correct if invalid
   # @return [ISBN]
   def self.corrected(ean)
-    ean.length < 11 ? self.new(ean[0..8]) : self.new(ean[0..11])
+    ISBN.new(ean[0..-2])
   end
 
   # Check if string can be instantiated

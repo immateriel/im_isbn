@@ -105,6 +105,11 @@ class TestIsbn < Minitest::Test
     should "correct invalid EAN10 control" do
       assert_equal "281450715X", ISBN.corrected("2814507150").to_ean10_s
     end
+
+    should "correct ISBN13" do
+      assert_equal "9782814507159", ISBN.corrected("978-2-8145-0715-9").to_s
+      assert_equal "281450715X", ISBN.corrected("2-8145-0715-X").to_ean10_s
+    end
   end
 
   context "validity" do
