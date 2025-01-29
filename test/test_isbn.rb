@@ -42,6 +42,9 @@ class TestIsbn < Minitest::Test
       assert_raises NilISBN do
         ISBN.new(nil)
       end
+      assert_raises NilISBN do
+        ISBN.corrected(nil)
+      end
     end
 
     should "raise an error if invalid control" do
@@ -109,6 +112,8 @@ class TestIsbn < Minitest::Test
     should "correct ISBN13" do
       assert_equal "9782814507159", ISBN.corrected("978-2-8145-0715-9").to_s
       assert_equal "281450715X", ISBN.corrected("2-8145-0715-X").to_ean10_s
+      assert_equal "9782382112939", ISBN.corrected("978-2-38211-293-9       ").to_s
+      assert_equal "9782382112939", ISBN.corrected("978-2- 38211-293-9 ").to_s
     end
   end
 

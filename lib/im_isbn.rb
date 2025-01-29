@@ -225,9 +225,11 @@ class ISBN
   end
 
   # Instantiate from any string, correct if invalid
-  # @return [ISBN]
+  # @return [ISBN, nil]
   def self.corrected(ean)
-    ISBN.new(ean[0..-2])
+    raise NilISBN if ean.nil?
+
+    ISBN.new(ean.delete(' ')[0..-2])
   end
 
   # Check if string can be instantiated
