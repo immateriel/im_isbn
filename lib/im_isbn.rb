@@ -225,7 +225,7 @@ class ISBN
   end
 
   # Instantiate from any string, correct if invalid
-  # @return [ISBN, nil]
+  # @return [ISBN]
   def self.corrected(ean)
     raise NilISBN if ean.nil?
 
