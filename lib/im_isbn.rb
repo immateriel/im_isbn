@@ -105,11 +105,11 @@ class ISBN
   # @param [Boolean] exact
   def initialize(any, exact = false)
     if any
-      @ean = any.to_s.delete('-').delete(' ')
+      @ean = any.to_s.delete("- ")
       case @ean.length
       when 9
         if exact
-          raise InvalidISBNLength, "given ISBN length is #{@ean.length}, must be 10 or 13"
+          raise InvalidISBNLength, "#{@ean} given ISBN length is #{@ean.length}, must be 10 or 13"
         else
           @type = :ean10
           raise InvalidISBNFormat unless self.class.ean10_check_format(@ean + "0")
@@ -121,10 +121,10 @@ class ISBN
         raise InvalidISBNFormat unless self.class.ean10_check_format(@ean)
         given_control = @ean[9..9]
         calculated_control = self.class.ean10_control("978" + @ean)
-        raise InvalidISBNControlKey, "given ISBN control key is #{given_control}, must be #{calculated_control}" if given_control != calculated_control
+        raise InvalidISBNControlKey, "#{@ean} given ISBN10 control key is #{given_control}, must be #{calculated_control}" if given_control != calculated_control
       when 12
         if exact
-          raise InvalidISBNLength, "given ISBN length is #{@ean.length}, must be 10 or 13"
+          raise InvalidISBNLength, "#{@ean} given ISBN length is #{@ean.length}, must be 10 or 13"
         else
           @type = :ean13
           raise InvalidISBNFormat unless self.class.ean13_check_format(@ean + "0")
@@ -136,9 +136,9 @@ class ISBN
         raise InvalidISBNFormat unless self.class.ean13_check_format(@ean)
         given_control = @ean[12..12]
         calculated_control = self.class.ean13_control(@ean)
-        raise InvalidISBNControlKey, "given ISBN control key is #{given_control}, must be #{calculated_control}" if given_control != calculated_control
+        raise InvalidISBNControlKey, "#{@ean} given ISBN13 control key is #{given_control}, must be #{calculated_control}" if given_control != calculated_control
       else
-        raise InvalidISBNLength, "given ISBN length is #{@ean.length}, must be 10 or 13"
+        raise InvalidISBNLength, "#{@ean} given ISBN length is #{@ean.length}, must be 10 or 13"
       end
     else
       raise NilISBN
