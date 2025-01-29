@@ -105,7 +105,7 @@ class ISBN
   # @param [Boolean] exact
   def initialize(any, exact = false)
     if any
-      @ean = any.to_s.delete "-"
+      @ean = any.to_s.delete('-').delete(' ')
       case @ean.length
       when 9
         if exact
@@ -229,7 +229,7 @@ class ISBN
   def self.corrected(ean)
     raise NilISBN if ean.nil?
 
-    ISBN.new(ean.delete(' ')[0..-2])
+    ISBN.new(ean[0..-2])
   end
 
   # Check if string can be instantiated
